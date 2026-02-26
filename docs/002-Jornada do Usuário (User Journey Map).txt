@@ -1,0 +1,87 @@
+================================================================================
+            DOCUMENTO 2: JORNADA DO USUÁRIO (USER JOURNEY MAP)
+================================================================================
+Projeto: TorneioHub ATH (Advanced Tournament Hub)
+Status: Versão 1.0 - Consolidado
+Filosofia: Agilidade Total / No-Login (Atletas) / Resiliência (Organizadores)
+--------------------------------------------------------------------------------
+
+1. PERSONA: O ORGANIZADOR (O ARQUITETO DO EVENTO)
+--------------------------------------------------------------------------------
+O objetivo aqui é permitir que um torneio complexo seja criado em minutos.
+
+PASSO 1: SETUP DO EVENTO MASTER
+- Cria o nome do evento (ex: "Intercolegial 2026").
+- Adiciona as modalidades (ex: Futsal, Xadrez, Tênis de Mesa).
+
+PASSO 2: CONFIGURAÇÃO DE REGRAS (O MOTOR ATH)
+- Para cada modalidade, define a Condição de Vitória (Pontos, Sets, Tempo).
+- Define o tamanho dos times e aciona o "Override Toggle" (Permitir times 
+  com menos jogadores que o padrão).
+- Define se a transição entre fases (ex: Grupos -> Final) será AUTOMÁTICA 
+  ou MANUAL.
+
+PASSO 3: RECRUTAMENTO E INSCRIÇÃO
+- O sistema gera um Link Único ou QR Code por modalidade.
+- O organizador compartilha no WhatsApp/Redes Sociais.
+
+PASSO 4: MODERAÇÃO
+- Painel de "Inscrições Pendentes" para validar quem entrou no torneio.
+- Botão de "Gerar Chaves" após o fechamento das inscrições.
+
+
+2. PERSONA: O ATLETA / TIME (INSCRIÇÃO FLASH)
+--------------------------------------------------------------------------------
+Foco em fricção zero. Sem senhas, sem formulários de 5 páginas.
+
+PASSO 1: ACESSO
+- O atleta clica no link e vê a landing page do torneio (Status: Inscrições Abertas).
+
+PASSO 2: FORMULÁRIO RÁPIDO (OPÇÃO 2)
+- Nome do Atleta ou Nome do Time.
+- Upload opcional de foto/escudo.
+- Contato (E-mail ou Telefone) apenas para recebimento do Card de Atleta.
+
+PASSO 3: O "LINK MÁGICO"
+- Após a inscrição, o sistema gera um Token ou Link Único.
+- Este link permite ao atleta editar seus dados ou fazer o check-in no dia, 
+  sem precisar criar conta com senha.
+
+PASSO 4: ACOMPANHAMENTO
+- O atleta pode "Seguir" o torneio e ver sua posição na chave em tempo real.
+
+
+3. PERSONA: O MESÁRIO / ÁRBITRO (OPERAÇÃO DE CAMPO)
+--------------------------------------------------------------------------------
+Interface mobile-first para quem está no calor do jogo.
+
+PASSO 1: ACESSO STAFF
+- O organizador gera um link de "Acesso Mesário" (não precisa de login comum).
+
+PASSO 2: LANÇAMENTO DE RESULTADOS
+- O mesário vê a lista de jogos do dia.
+- Clica no jogo -> Digita o Placar (ex: 2 x 1).
+- O sistema valida a regra de vitória instantaneamente.
+
+PASSO 3: OVERRIDE DE CAMPO
+- Se um time não comparece, o mesário marca "W.O.". 
+- O sistema exige uma breve justificativa que fica gravada no log de auditoria.
+
+
+4. LÓGICA DE TRANSIÇÃO DE FASES (WORKFLOW)
+--------------------------------------------------------------------------------
+A inteligência que move o torneio para frente.
+
+ESTADO A: FASE EM CURSO
+- Partidas sendo disputadas e resultados sendo lançados.
+
+ESTADO B: GATILHO DE ENCERRAMENTO
+- Todas as partidas foram concluídas OU o Organizador clicou em 
+  "Encerrar Fase Manualmente" (Override).
+
+ESTADO C: PROCESSAMENTO ATH
+- O sistema calcula a classificação (Pontos, Saldo, Confrontos Diretos).
+- Se MODO AUTOMÁTICO: O sistema já "semeia" os classificados na próxima 
+  fase (Mata-mata) e dispara notificações.
+- Se MODO MANUAL: O sistema apresenta a sugestão de chaves e aguarda o 
+  "OK" do organizador para publicar a próxima fase.

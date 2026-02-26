@@ -1,0 +1,76 @@
+📑 Documento 1: Arquitetura de Dados (Data Schema & Core Entities)
+Projeto: TorneioHub ATH (Advanced Tournament Hub)
+
+Status: Versão 1.0 - Consolidado
+
+1. Visão Geral da Arquitetura
+A arquitetura é baseada em um modelo Híbrido Relacional-Documental. Usaremos tabelas estruturadas para o fluxo principal e campos metadata (JSONB) para a flexibilidade de esportes e regras personalizadas.
+
+2. Diagrama de Entidades Principais
+A. Core: O Evento e as Competições
+Organization: (Dono do ambiente, ex: "Condomínio Solar", "Escola Estadual").
+
+Event (Master): O "guarda-chuva" (ex: "Olimpíadas de Inverno 2026").
+
+Tournament (Modalidade): Cada jogo dentro do evento.
+
+win_condition_type: (Maior Pontuação, Menor Tempo, Pontuação Alvo).
+
+win_condition_value: (Ex: 25 para vôlei, 1 para vitória simples).
+
+metadata: Configurações específicas do esporte (ex: "Duração do tempo: 15min").
+
+B. Participantes (O Ator Universal)
+Participant:
+
+type: (INDIVIDUAL | TEAM).
+
+status: (ACTIVE | DISQUALIFIED | INCOMPLETE).
+
+metadata: Campos extras (camisa, posição, nível, CPF).
+
+Team_Members: Tabela de ligação para compor times a partir de usuários/atletas.
+
+C. O Motor de Fases (Workflow)
+Phase: Uma etapa do torneio.
+
+type: (ROUND_ROBIN | SINGLE_ELIMINATION | DOUBLE_ELIMINATION | CUSTOM).
+
+order: Sequência da fase (1ª, 2ª...).
+
+status: (PENDING | ACTIVE | COMPLETED).
+
+transition_strategy: (AUTO | MANUAL).
+
+Transition_Rules: Define como os participantes "pulam" de uma fase para outra (ex: Top 2 de cada grupo -> Oitavas).
+
+D. A Partida (Match)
+Match:
+
+status: (SCHEDULED | LIVE | FINISHED | CANCELLED).
+
+score_a / score_b: Decimais para suportar qualquer métrica.
+
+override_log: JSON registrando quem forçou um resultado ou início irregular.
+
+3. Lógica de Resiliência (Os "Overrides")
+Para garantir que o sistema não trave, implementaremos o Pattern de Bypass:
+
+Validation Engine: Antes de cada partida ou troca de fase, o sistema roda um CheckRules().
+
+Alert System: Se um time de futebol tem 4 jogadores (mínimo era 5), o sistema emite um Warning.
+
+Organizer Key: O organizador possui uma permissão de FORCE_EXECUTE. Ao acionar, o sistema executa a ação e grava no audit_log: "Fase encerrada manualmente por Eduardo em 26/02/2026 - Motivo: Time desistente".
+
+4. Estrutura de Metadados (Exemplo JSONB)
+Para um torneio de Tênis de Mesa, o campo metadata da partida seria:
+
+JSON
+{
+  "sets": [
+    {"a": 11, "b": 8},
+    {"a": 11, "b": 13},
+    {"a": 11, "b": 5}
+  ],
+  "equipment_checked": true
+}
