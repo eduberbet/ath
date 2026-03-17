@@ -1,0 +1,83 @@
+================================================================================
+            DOCUMENTO 3: MOTOR DE FASES E LOGICA DE CLASSIFICACAO
+================================================================================
+Projeto: TorneioHub ATH (Advanced Tournament Hub)
+Status: Versao 1.0 - Consolidado
+Foco: Maquina de Estados, Algoritmo de Standings e Seed Mapping.
+--------------------------------------------------------------------------------
+
+1. A MAQUINA DE ESTADOS (LIFECYCLE DA FASE)
+--------------------------------------------------------------------------------
+Para garantir a previsibilidade e evitar bugs de corrupcao de dados, 
+cada Fase (Phase) segue um ciclo de vida estrito.
+
+[ESTADO]             [PERMISSOES DO ORGANIZADOR E COMPORTAMENTO]
+DRAFT              - Fase sendo configurada.
+                   - Pode adicionar times, mudar regras e sortear grupos.
+
+ACTIVE             - Jogos em andamento.
+                   - Pode lancar resultados e aplicar W.O. 
+                   - Sistema bloqueia alteracao de regras de pontuacao.
+
+PENDING_TRANSITION - Todos os jogos encerrados, aguardando transicao.
+                   - Pode revisar a classificacao final.
+                   - Pode acionar o "Seed Mapping" (Sorteio/Cruzamento).
+
+COMPLETED          - Fase finalizada e chaves da proxima fase geradas.
+                   - Bloqueado para edicao. 
+                   - Apenas permissao de FORCE_ROLLBACK (em caso de erro grave).
+
+
+2. MOTOR DE CLASSIFICACAO DINAMICA (STANDINGS ENGINE)
+--------------------------------------------------------------------------------
+O ATH nao e rigido. O calculo da tabela de grupos e baseado em uma 
+formula (JSON) definida no Setup do Evento.
+
+ESTRUTURA DA REGRA DE PONTUACAO (SCORE RULE):
+- Vitoria (Win): X pontos.
+- Empate (Draw): Y pontos.
+- Derrota (Loss): Z pontos.
+- Bonus (Opcional): W pontos (Ex: Ponto extra por atingir meta especifica).
+
+GATILHO DE ATUALIZACAO:
+Toda vez que uma partida muda para o status "FINISHED", o backend roda um 
+worker que recalcula a tabela "Standings" apenas daquele grupo.
+
+
+3. PIPELINE DE DESEMPATE (TIEBREAKER ARRAY)
+--------------------------------------------------------------------------------
+Se dois ou mais participantes terminam com os mesmos pontos, o sistema 
+executa um "Pipeline" de funcoes na ordem exata definida pelo Organizador.
+
+EXEMPLO DE PIPELINE (Fluxo padrao estilo Futebol/Futsal):
+Regra 1: Maior numero de Vitorias.
+Regra 2: Maior Saldo de "Unidades de Pontuacao" (Gols/Sets/Pontos).
+Regra 3: Maior numero de "Unidades de Pontuacao" Pro (Marcados).
+Regra 4: Confronto Direto (Resultado da partida entre os empatados).
+Regra 5: Sorteio Automatico (Gerador de numero aleatorio com seed 
+         salva no banco para auditoria publica).
+
+Se a Regra 1 empatar, o sistema passa para a Regra 2, e assim por diante.
+
+
+4. O "SEED MAPPING" (TRANSICAO HIBRIDA DE FASES)
+--------------------------------------------------------------------------------
+O momento em que uma Fase de Grupos se transforma em Mata-Mata.
+
+FLUXO AUTOMATICO (AUTO-SEEDING):
+- O sistema le a regra: "Avancam os 2 primeiros de cada grupo".
+- Pega o 1o do Grupo A -> Rotula como [Seed 1A].
+- Pega o 2o do Grupo B -> Rotula como [Seed 2B].
+- Aplica a formula de transicao: Partida 1 = [Seed 1A] vs [Seed 2B].
+
+LOGICA DE RESILIENCIA (MANUAL OVERRIDE):
+- Ao final da fase, o sistema entra em PENDING_TRANSITION.
+- A interface exibe a sugestao de confrontos gerada pelo fluxo automatico.
+- O Organizador pode arrastar e soltar (Drag and Drop) para alterar 
+  um confronto caso haja alguma punicao externa ou acordo local.
+- Ao clicar em "Aprovar Transicao", a proxima fase (Mata-Mata) 
+  muda para o estado ACTIVE e as notificacoes sao disparadas.
+
+--------------------------------------------------------------------------------
+FIM DO DOCUMENTO 3
+================================================================================

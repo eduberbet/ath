@@ -1,0 +1,89 @@
+================================================================================
+            DOCUMENTO 5: PLANO DE IMPLEMENTACAO INCREMENTAL (ROADMAP)
+================================================================================
+Projeto: TorneioHub ATH (Advanced Tournament Hub)
+Status: Versao 1.0 - Consolidado
+Foco: Metodologia de Desenvolvimento, Regras de Sprint e Cronograma de Versoes.
+--------------------------------------------------------------------------------
+
+1. AS 8 REGRAS DE OURO DO DESENVOLVIMENTO ATH
+--------------------------------------------------------------------------------
+R1. Evolucao Incremental: Fases partem do uso comum para o complexo. Nenhuma 
+    feature avancada sera feita sem a base validada.
+R2. Versionamento Pareado: Toda Alpha (ex: v1.0, v2.0) tera obrigatoriamente 
+    uma versao de correcao e estabilizacao (ex: v1.5, v2.5).
+R3. Nomenclatura Tematica: Versoes receberao nomes de objetos esportivos 
+    seguidos de um adjetivo (ex: Apito Desbravador).
+R4. Escopo Fechado: Maximo de 3 funcionalidades por Alpha.
+R5. A Grande Refatoracao: A cada 4 sprints de features, o 5o sprint sera 
+    exclusivo para refatoracao, limpeza de divida tecnica e otimizacao.
+R6. Regra do Pivot (Fail Fast): Se uma funcionalidade nao for debugada e 
+    estabilizada em 2 iteracoes, ela sera descartada e repensada do zero.
+R7. Documentacao Pre-Codigo: Toda feature sera debatida e desenhada logicamente 
+    antes de qualquer linha de codigo ser gerada.
+R8. Test-Driven: Testes logicos e simulacoes de mesa ocorrem antes, durante 
+    e depois do codigo. O codigo final so entra na versao apos o debug validado.
+
+
+2. CRONOGRAMA DE SPRINTS (O CAMINHO ATE A GLORIA)
+--------------------------------------------------------------------------------
+
+[SPRINT 1: O ALICERCE] - Foco: Setup e Cadastro
+-> v1.0 Alpha: Apito Desbravador
+   1. Criacao do Evento Master e Banco de Dados Inicial.
+   2. Modalidade Basica (Liga/Pontos Corridos simples).
+   3. Inscricao Flash (Link e formulario para Atleta sem login).
+-> v1.5 Debug: Testes de vazamento e falhas de persistencia no banco.
+
+[SPRINT 2: A BOLA ROLANDO] - Foco: Operacao de Jogo
+-> v2.0 Alpha: Prancheta Estrategica
+   1. Painel do Mesario (Interface mobile de placar simples).
+   2. Motor de Classificacao (Calculo de pontos em tempo real).
+   3. Visualizacao Publica da Tabela (Read-only).
+-> v2.5 Debug: Testes de stress em recalculo e resolucao de empates.
+
+[SPRINT 3: O MATA-MATA] - Foco: Chaveamento (Bracket)
+-> v3.0 Alpha: Cronometro Implacavel
+   1. Gerador de Chaves Visual (Componente de UI da arvore).
+   2. Transicao Automatica (Seed Mapping: Grupos -> Mata-mata).
+   3. Transicao Manual (Aprovacao do organizador antes de gerar a chave).
+-> v3.5 Debug: Quebras visuais em mobile e falhas logicas de seed.
+
+[SPRINT 4: A RESILIENCIA] - Foco: Mundo Real e Imprevistos
+-> v4.0 Alpha: Cartao Flexivel
+   1. Sistema de Override (Botao de forca bruta: W.O., jogos incompletos).
+   2. Condicoes de Vitoria Customizadas (JSONB: Sets vs. Gols).
+   3. Log de Auditoria (Registro de acoes do Organizador).
+-> v4.5 Debug: Conflitos entre Override e a arvore do Sprint 3.
+
+[SPRINT 5: O CHECK-UP] - Foco: Qualidade de Codigo
+-> v5.0: Vestiario Impecavel
+   - ZERO funcoes novas. 
+   - Refatoracao de NestJS, queries PostgreSQL, tipagens TypeScript e 
+     remocao de codigos mortos.
+
+[SPRINT 6: O MODO OLIMPIADA] - Foco: Escala e Simultaneidade
+-> v6.0 Alpha: Raquete Polivalente
+   1. Dashboard Master (Gestao de multiplas modalidades).
+   2. Prevencao de Conflitos de Agenda (Atleta em 2 jogos ao mesmo tempo).
+   3. WebSockets Core (Tabela atualiza na tela sem F5).
+-> v6.5 Debug: Estabilidade de conexao WS e gerenciamento de estado global.
+
+[SPRINT 7: A CONSAGRACAO] - Foco: Ferramentas Avancadas
+-> v7.0 Alpha: Trofeu Reluzente
+   1. Sumula Digital Avancada (Cartoes, MVP, punicoes).
+   2. Exportacao de Dados (PDF da chave, CSV de resultados).
+   3. PWA Polish (Funcionamento offline basico, manifest, icones).
+-> v7.5 Debug: Testes de geracao de arquivos e cache offline.
+
+[SPRINT 8: O APITO FINAL] - Foco: QA Ponta a Ponta
+-> v8.0: Podio Inabalavel
+   - Bateria de testes E2E (End-to-End) simulando um torneio completo, 
+     da criacao a final, com multiplos usuarios simultaneos.
+   - Auditoria de seguranca (Magic Links e JWTs).
+   - Teste de carga basico.
+   - Polimento final de UI/UX.
+
+--------------------------------------------------------------------------------
+FIM DO DOCUMENTO 5
+================================================================================

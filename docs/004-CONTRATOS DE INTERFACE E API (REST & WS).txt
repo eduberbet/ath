@@ -1,0 +1,91 @@
+================================================================================
+            DOCUMENTO 4: CONTRATOS DE INTERFACE E API (REST & WS)
+================================================================================
+Projeto: TorneioHub ATH (Advanced Tournament Hub)
+Status: Versao 1.0 - Consolidado
+Foco: Comunicacao Frontend (PWA) <-> Backend (NestJS), WebSockets e Payloads.
+--------------------------------------------------------------------------------
+
+1. PADROES GERAIS DA API
+--------------------------------------------------------------------------------
+- Arquitetura: RESTful para operacoes de estado (CRUD) e WebSockets (WS) 
+  para atualizacoes em tempo real (placar e chaves).
+- Autenticacao: 
+  -> Organizadores: JWT via Bearer Token.
+  -> Atletas (Inscricao Flash): Magic Link Token (JWT de uso restrito).
+- Respostas: Padrao envelope { "data": {}, "meta": {}, "error": null }.
+
+
+2. ENDPOINTS CORE (REST)
+--------------------------------------------------------------------------------
+
+A. GESTAO DE EVENTOS (ORGANIZADOR)
+[POST] /api/v1/events
+- Cria o guarda-chuva do evento.
+
+[POST] /api/v1/events/{id}/tournaments
+- Adiciona uma modalidade.
+- Payload esperado:
+  {
+    "name": "Futsal Masculino Livre",
+    "win_condition_type": "HIGHEST_SCORE",
+    "team_size": { "min": 4, "max": 12 },
+    "metadata": { "sport": "futsal", "halves": 2, "time_per_half": 15 }
+  }
+
+B. INSCRICAO FLASH (ATLETA - SEM LOGIN)
+[POST] /api/v1/tournaments/{id}/enroll
+- Inscreve um participante e retorna o Magic Token.
+- Payload esperado:
+  {
+    "type": "TEAM",
+    "name": "Curitiba FC",
+    "contact": "email_ou_whatsapp"
+  }
+
+C. OPERACAO DE CAMPO (MESARIO)
+[PUT] /api/v1/matches/{match_id}/score
+- Atualiza o placar. Suporta o Override do Organizador.
+- Payload esperado:
+  {
+    "score_a": 3,
+    "score_b": 1,
+    "status": "FINISHED",
+    "override_flag": false,
+    "override_reason": null
+  }
+
+
+3. EVENTOS DE TEMPO REAL (WEBSOCKETS)
+--------------------------------------------------------------------------------
+Para que a tela do ginasio e o PWA do atleta atualizem sem F5.
+
+- Namespace WS: /live/{tournament_id}
+
+[EVENTO EMITIDO PELO BACKEND] -> "match.score.updated"
+- Disparado a cada gol/ponto validado. Atualiza os cards de partida.
+- Payload: { "match_id": "uuid", "score_a": 3, "score_b": 1 }
+
+[EVENTO EMITIDO PELO BACKEND] -> "standings.calculated"
+- Disparado ao fim de uma partida, enviando a nova tabela de grupos.
+- Payload: { "group_id": "uuid", "standings": [...] }
+
+[EVENTO EMITIDO PELO BACKEND] -> "phase.transitioned"
+- Disparado quando o organizador aprova o Seed Mapping. 
+- Acao no Front: Anima a arvore da chave (Bracket) exibindo os novos jogos.
+
+
+4. TRATAMENTO DE ERROS (HTTP STATUS)
+--------------------------------------------------------------------------------
+- 200 OK: Sucesso.
+- 400 Bad Request: Falha na validacao (Ex: Tentou enviar resultado texto 
+  onde a regra pede numero).
+- 403 Forbidden: Sem permissao (Ex: Mesario tentando aprovar transicao 
+  de fase; apenas Organizador pode).
+- 409 Conflict: Regra de negocio violada (Ex: Time incompleto sem Override).
+  * O front-end captura o 409 e exibe o modal: "Deseja forcar o inicio 
+    mesmo assim? [OVERRIDE]".
+
+--------------------------------------------------------------------------------
+FIM DO DOCUMENTO 4
+================================================================================

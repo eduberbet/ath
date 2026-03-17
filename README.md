@@ -25,30 +25,19 @@ O **TorneioHub ATH** é uma plataforma Open Source projetada para ser o coraçã
 
 ---
 
-## 🚀 Roadmap de Desenvolvimento
+## 🚀 Roadmap de Desenvolvimento (O Padrão ATH)
 
-Estamos construindo as fundações de algo grande. Confira nossa jornada:
+Nosso desenvolvimento segue uma metodologia estrita de evolução incremental, garantindo que nenhuma funcionalidade avançada seja construída sobre uma base frágil. Cada ciclo de *Feature* (Alpha) é obrigatoriamente seguido por um ciclo de *Debug*.
 
-### 🟢 Fase 0: Definição & Documentação (ATUAL)
-- [x] Nome e Identidade Visual (ATH)
-- [x] Arquitetura de Dados e Entidades
-- [x] Mapeamento de Jornada do Usuário
-- [ ] Especificação da API Core
-
-### 🟡 Fase 1: Core Engine (MVP)
-- [ ] Módulo de Inscrição "Flash"
-- [ ] Gerador de Chaves Simples (Mata-mata e Pontos Corridos)
-- [ ] Painel do Organizador (Básico)
-
-### ⚪ Fase 2: Advanced Logic
-- [ ] Motor de Transição de Fases (Híbrido)
-- [ ] Sistema de Overrides e Logs de Auditoria
-- [ ] Suporte a múltiplas modalidades simultâneas
-
-### ⚪ Fase 3: Live Experience
-- [ ] Súmula Digital para Mesários
-- [ ] Notificações Push para Atletas
-- [ ] Dashboard de Estatísticas Públicas
+* **🟢 Fase 0: O Aquecimento (Concluída)** - Documentação Arquitetural e Modelagem de Dados.
+* **🏁 Sprint 1: Apito Desbravador (v1.x)** - O Alicerce: Criação do Evento Master e Inscrição Flash (sem login).
+* **⚽ Sprint 2: Prancheta Estratégica (v2.x)** - A Bola Rolando: Painel do Mesário e Motor de Classificação para grupos.
+* **⏱️ Sprint 3: Cronômetro Implacável (v3.x)** - O Mata-Mata: Gerador de Chaves visual e Transição Automática de fases.
+* **🟨 Sprint 4: Cartão Flexível (v4.x)** - A Resiliência: Sistema de Override, regras customizadas e Logs de Auditoria.
+* **🧹 Sprint 5: Vestiário Impecável (v5.0)** - A Grande Refatoração: Sprint exclusivo para limpeza técnica e otimização. Nenhuma feature nova.
+* **🏓 Sprint 6: Raquete Polivalente (v6.x)** - Modo Olimpíada: Gestão de múltiplas modalidades simultâneas e WebSockets.
+* **🏆 Sprint 7: Troféu Reluzente (v7.x)** - A Consagração: Súmula Digital Avançada e polimento do PWA.
+* **🛡️ Sprint 8: Pódio Inabalável (v8.0)** - O Apito Final: Bateria de testes End-to-End (E2E), testes de carga e estabilização para o lançamento oficial.
 
 ---
 
@@ -58,7 +47,7 @@ Este é um projeto **Open Source** e sua ajuda é fundamental para torná-lo a f
 
 Se você tem dúvidas, sugestões de funcionalidades, deseja contribuir com código ou quer apoiar o projeto com doações, entre em contato diretamente com o idealizador:
 
-📧 **Eduardo Berbet de Alcantara** 📩 **[edu.berbet@gmail.com]** 📩 **[edu.berbet@hotmail.com]**
+📧 **Eduardo Berbet de Alcantara** 📩 **[edu.berbet@gmail.com]** 
 
 ---
 
